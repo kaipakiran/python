@@ -19,21 +19,24 @@ def get_palindrome(text):
     candidates = {}
     cursor = 0
     for i in range(0,len(text)):
-        match = text.find(''.join(list(reversed(text[cursor:i+1]))),cursor)
+        substr = ''.join(text[cursor:i+1])
+        match = text.find(''.join(list(reversed(substr))),cursor)
+        # print("reve rsed: ",''.join(list(reversed(text[cursor:i+1]))), cursor, match)
+        # print(match- i)
+        # print((match -i) in [0,1,2])
         if match == -1:
-            substr = ''.join(text[cursor:i+1])
-            if is_palindrome(substr):
-                if(len(substr) in candidates.keys()):
-                    candidates[len(substr)].append(substr)
-                else:
-                    candidates[len(substr)] = [substr]
-            cursor = i
-        elif((match - i) in [0,1,2]):
-            if len(text[cursor:(match+(i+1-cursor))]) in candidates.keys():
-                candidates[len(text[cursor:(match+(i+1-cursor))])].append(text[cursor:(match+(i+1-cursor))])
+            cursor = cursor + 1
+            i = cursor
+            print(cursor)
+        if is_palindrome(substr):
+            if(len(substr) in candidates.keys()):
+                candidates[len(substr)].append(substr)
             else:
-                candidates[len(text[cursor:(match+(i+1-cursor))])] = [text[cursor:(match+(i+1-cursor))]]
-    return list(set(candidates[max(candidates.keys())]))[0]
+                candidates[len(substr)] = [substr]
+    #print(candidates)
+    if len(candidates.keys())==0:
+        return text[0]
+    return list(set(candidates[max(candidates.keys())]))[0] if len(text)>0 else ""
 
 
 get_palindrome('nitin')
@@ -41,3 +44,4 @@ get_palindrome('nan')
 get_palindrome('aaakiranakaartsafdadanniittiinnnniittiinn')
 # fails abcda
 get_palindrome('abcda') # expected solution is "a"
+get_palindrome('abacab')
